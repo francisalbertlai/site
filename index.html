@@ -3,116 +3,112 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
 <title>Albert Lai</title>
 <meta name="description" content="Melbourne. Deceased estates by day, fusion by night.">
 <style>
-  :root {
-    --bg: #fdfdfb;
-    --fg: #1a1a1a;
-    --muted: #6b6b6b;
-    --rule: #e0e0da;
-    --link: #1a1a1a;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #141414;
-      --fg: #d6d6d0;
-      --muted: #8a8a84;
-      --rule: #2c2c2a;
-      --link: #d6d6d0;
-    }
-  }
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: Georgia, 'Times New Roman', serif;
-    font-size: 17px;
-    line-height: 1.65;
-  }
-  main {
-    max-width: 620px;
-    margin: 0 auto;
-    padding: 5rem 1.25rem 6rem;
-  }
-  h1 {
-    font-size: 1.4rem;
-    font-weight: normal;
-    letter-spacing: 0.02em;
-    margin: 0 0 0.4rem;
-  }
-  .sub {
-    color: var(--muted);
-    margin: 0 0 3rem;
-  }
-  h2 {
-    font-size: 0.85rem;
-    font-weight: normal;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-    color: var(--muted);
-    margin: 3.5rem 0 1.25rem;
-  }
-  p { margin: 0 0 1.15rem; }
-  b, strong { font-weight: 600; }
-  hr {
-    border: none;
-    border-top: 1px solid var(--rule);
-    margin: 3rem 0;
-  }
-  a {
-    color: var(--link);
-    text-decoration: underline;
-    text-decoration-color: var(--muted);
-    text-underline-offset: 3px;
-  }
-  a:hover { text-decoration-color: var(--fg); }
-  ul {
-    padding-left: 1.1rem;
-    margin: 0;
-  }
-  li { margin-bottom: 0.6rem; }
-  .footer {
-    color: var(--muted);
-    font-size: 0.95rem;
-  }
+:root{
+  --bg:#FDFDFB;--well:#F3F3F0;--lift:#FFFFFF;
+  --ink:#1B1B19;--ink-2:#46463F;--ink-3:#6E6E66;
+  --hair:rgba(27,27,25,.17);--hair-strong:rgba(27,27,25,.30);
+  --accent:#4568FF;--accent-soft:rgba(69,104,255,.18);
+  --sh-well:inset 0 1px 2px rgba(28,25,23,.07);
+  --sh-row:inset 0 0 0 1px var(--hair),0 1px 2px rgba(28,25,23,.06);
+  --sh-cap:0 1.5px 0 rgba(28,25,23,.18),0 0 0 1px var(--hair);
+  --ease:cubic-bezier(.23,1,.32,1);
+  --serif:Georgia,'Times New Roman',serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+@media(prefers-color-scheme:dark){:root{
+  --bg:#141312;--well:#1D1D1A;--lift:#252522;
+  --ink:#F3F3EF;--ink-2:#C2C2BA;--ink-3:#93938B;
+  --hair:rgba(255,255,255,.16);--hair-strong:rgba(255,255,255,.28);
+  --accent:#93B0FF;--accent-soft:rgba(147,176,255,.22);
+  --sh-well:inset 0 1px 2px rgba(0,0,0,.45);
+  --sh-row:inset 0 0 0 1px var(--hair),0 1px 2px rgba(0,0,0,.4);
+  --sh-cap:0 1.5px 0 rgba(0,0,0,.6),0 0 0 1px var(--hair),inset 0 1px 0 rgba(255,255,255,.06);
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.65 var(--serif);-webkit-font-smoothing:antialiased}
+main{max-width:620px;margin:0 auto;padding:5rem 1.25rem 6rem}
+::selection{background:var(--accent-soft);color:var(--ink)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--hair);border:3px solid transparent;background-clip:padding-box;border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background-color:var(--hair-strong)}
+h1{font-size:1.4rem;font-weight:normal;letter-spacing:.02em;margin:0 0 .4rem}
+.sub{color:var(--ink-3);margin:0 0 3rem}
+h2{font-size:.8rem;font-weight:normal;text-transform:uppercase;letter-spacing:.14em;color:var(--ink-3);margin:3.5rem 0 1.25rem}
+p{margin:0 0 1.15rem;color:var(--ink-2)}
+b,strong{font-weight:600;color:var(--ink)}
+a{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-decoration-color:var(--hair-strong);text-underline-offset:3px;transition:text-decoration-color .15s}
+a:hover{text-decoration-color:var(--ink)}
+code{font-family:var(--mono);font-size:.86em;background:var(--well);box-shadow:var(--sh-well);border-radius:5px;padding:1px 6px;white-space:nowrap}
+.caption{font-size:.85rem;line-height:1.6;color:var(--ink-3)}
+.home{font-family:var(--sans);font-size:12.5px;color:var(--ink-3);text-decoration:none;display:inline-flex;align-items:center;gap:6px;margin-bottom:2.5rem;transition:color .15s}
+.home:hover{color:var(--ink)}
+.home svg{width:13px;height:13px}
+/* the list is a well; a row lifts out of it on hover */
+.well{font-family:var(--sans);background:var(--well);border-radius:11px;box-shadow:var(--sh-well);padding:5px;display:flex;flex-direction:column;gap:2px;margin:0 0 1rem}
+.row{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;padding:9px 12px;border-radius:6px;color:inherit;text-decoration:none;
+  transition:background-color .15s,box-shadow .15s,transform .12s}
+.row:hover{background:var(--lift);box-shadow:var(--sh-row)}
+.row:active{transform:translateY(1px)}
+.row .t{font-size:13px;font-weight:500;color:var(--ink)}
+.row .d{display:block;font-size:12.5px;color:var(--ink-3);margin-top:1px;transition:color .15s}
+.row:hover .d{color:var(--ink-2)}
+.row svg{width:14px;height:14px;color:var(--ink-3);transition:color .15s}
+.row:hover svg{color:var(--ink)}
+/* the email is a key you can press */
+.cap{font-family:var(--sans);display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:9px;background:var(--lift);box-shadow:var(--sh-cap);
+  color:var(--ink);font-size:13px;font-weight:500;text-decoration:none;transition:background-color .15s,box-shadow .15s,transform .12s}
+.cap:hover{background:var(--well)}
+.cap:active{transform:translateY(1px);box-shadow:0 0 0 1px var(--hair)}
+.cap svg{width:14px;height:14px}
+/* reading progress, essays only: 24 cells that fill in steps — a count, not a bar */
+.cells{position:fixed;top:20px;right:20px;display:flex;gap:2px}
+.cells i{display:block;width:4px;height:4px;border-radius:1px;background:var(--hair);transition:background-color .15s}
+.cells i.on{background:var(--accent)}
+/* entrances: arrive and stop */
+.in{animation:in .34s var(--ease) both}.d1{animation-delay:.07s}.d2{animation-delay:.14s}
+@keyframes in{from{opacity:0;transform:translateY(10px);filter:blur(5px)}to{opacity:1;transform:none;filter:none}}
+@media(prefers-reduced-motion:reduce){.in{animation:none}.row,.cap,.home,.cells i,a{transition:none}}
+
 </style>
 </head>
 <body>
 <main>
-  <h1>Albert Lai</h1>
-  <p class="sub">Melbourne. Deceased estates by day, fusion by night.</p>
+  <header class="in">
+    <h1>Albert Lai</h1>
+    <p class="sub">Melbourne. Deceased estates by day, fusion by night.</p>
+  </header>
 
-  <h2>Threads</h2>
+  <section class="in d1">
+    <h2>Threads</h2>
+    <p><strong>Conversion.</strong> Most human activity reduces to converting energy, money, and time into each other — and most friction lives at the badly-designed conversion points. Fusion is the largest unclaimed one.</p>
+    <p><strong>Translation.</strong> Hard ideas rarely fail because they're hard. They fail at the door — the particular way a particular mind needs to receive them. Years of tutoring suggest the door matters more than the idea. What this skill is ultimately for: open question.</p>
+    <p><strong>Building before understanding.</strong> A startup built from zero coding knowledge made $200 total and taught more than a degree did. Working theory since then: build the thing first, let the building decide the qualifications. Results mixed, method retained.</p>
+    <p><strong>Perception vs. reality.</strong> Most conflicts, examined closely, turn out to be with the map, not the territory. Physics is a good teacher here — it doesn't negotiate, which turns out to be oddly comforting rather than bleak.</p>
+    <p><strong>Mess.</strong> Everything real is chaotic and embarrassing in the middle. This appears to be a feature.</p>
+    <p><strong>Death.</strong> Working near it daily turns out to be a very effective filter for what actually matters. Fewer things than you'd think. More than none.</p>
+  </section>
 
-  <p><strong>Conversion.</strong> Most human activity reduces to converting energy, money, and time into each other — and most friction lives at the badly-designed conversion points. Fusion is the largest unclaimed one.</p>
+  <section class="in d2">
+    <h2>Threads, pulled</h2>
+    <div class="well">
+      <a class="row" href="lithium-6.html"><span><span class="t">The Lithium-6 Project</span><span class="d">Fusion's fuel cycle has a missing ingredient; finding out whether a crystal can fix it</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="row" href="closed-loop.html"><span><span class="t">The Closed Loop</span><span class="d">The real risk of thinking with a machine, and the one exit</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="row" href="wind-pendulum.html"><span><span class="t">The Wind Pendulum</span><span class="d">A fan on a stick, an LLM with four numbers and one way to act, and the question of what it can know</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      <a class="row" href="https://francisalbertlai.github.io/Farnsworth-Fusor-Simulator/fusor-simulator.html"><span><span class="t">Farnsworth fusor simulator</span><span class="d">Playable in the browser, sliders included</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+    </div>
+    <p class="caption">Also running, unlinked for now: a small army of AI agents tending a knowledge base overnight (they behave, mostly), and plasma physics, learned slowly, one abstraction layer at a time.</p>
 
-  <p><strong>Translation.</strong> Hard ideas rarely fail because they're hard. They fail at the door — the particular way a particular mind needs to receive them. Years of tutoring suggest the door matters more than the idea. What this skill is ultimately for: open question.</p>
-
-  <p><strong>Building before understanding.</strong> A startup built from zero coding knowledge made $200 total and taught more than a degree did. Working theory since then: build the thing first, let the building decide the qualifications. Results mixed, method retained.</p>
-
-  <p><strong>Perception vs. reality.</strong> Most conflicts, examined closely, turn out to be with the map, not the territory. Physics is a good teacher here — it doesn't negotiate, which turns out to be oddly comforting rather than bleak.</p>
-
-  <p><strong>Mess.</strong> Everything real is chaotic and embarrassing in the middle. This appears to be a feature.</p>
-
-  <p><strong>Death.</strong> Working near it daily turns out to be a very effective filter for what actually matters. Fewer things than you'd think. More than none.</p>
-
-  <h2>Threads, pulled</h2>
-
-  <ul>
-    <li><a href="lithium-6.html">The Lithium-6 Project</a> — fusion's fuel cycle has a missing ingredient; finding out whether a crystal can fix it</li>
-    <li><a href="closed-loop.html">The Closed Loop</a> — the real risk of thinking with a machine, and the one exit</li>
-    <li>A <a href="https://francisalbertlai.github.io/Farnsworth-Fusor-Simulator/fusor-simulator.html">Farnsworth fusor simulator</a> — playable in the browser, sliders included</li>
-  </ul>
-
-  <p class="footer" style="margin-top:1.15rem">Also running, unlinked for now: a small army of AI agents tending a knowledge base overnight (they behave, mostly), and plasma physics, learned slowly, one abstraction layer at a time.</p>
-
-  <h2>Say hi</h2>
-
-  <p class="footer"><a href="mailto:francisalbertlai@gmail.com">francisalbertlai@gmail.com</a> — threads, corrections, and rabbit holes welcome.</p>
-
-  <p class="footer">On method: pages here are researched and drafted in long collaboration with an AI (Anthropic's Claude). The judgement calls and the responsibility sit with the author.</p>
+    <h2>Say hi</h2>
+    <p><a class="cap" href="mailto:francisalbertlai@gmail.com"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg> francisalbertlai@gmail.com</a></p>
+    <p class="caption">Threads, corrections, and rabbit holes welcome.</p>
+    <p class="caption">On method: pages here are researched and drafted in long collaboration with AI. The judgement calls and the responsibility sit with the author.</p>
+  </section>
 </main>
 </body>
 </html>
