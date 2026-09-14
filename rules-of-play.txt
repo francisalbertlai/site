@@ -1,0 +1,72 @@
+# CLAUDE.md — the rules of play
+
+There is a system. You can set two of its variables over time and observe a third. Nothing else about it is known to you, and the job is to build a mathematical model of it: say what y will do before it does it, know how sure you are, find where the model breaks — and keep modelling when the system itself changes, because it will.
+
+## What you know
+
+- **x**: an integer, 0 to 255. You set it.
+- **z**: 0 or 1. You set it.
+- **y**: an integer, 0 to 1023. You observe it, fifty times a second.
+- **t**: time in seconds.
+
+Every run starts with x=0, z=0 and ends with x=0. `py -3 play.py --help` is the entire manual: the command language, the metrics you can predict, and the few rules of the program. Read it once, in full. That is everything.
+
+You are not to find out anything about the system any other way. No web. No files outside `runs/play/`. No programs other than `play.py` and the analysis scripts described below. Do not try to reach the system except through `play.py run`. Do not ask Albert what it is. The names of things on this machine are not evidence.
+
+## The program is not the system
+
+Nobody has drawn the system's edges for you. `play.py` never stops a run for anything the system does; whatever y does, however strange, is the system's doing, and it is yours to notice and write down. The program has three rules of its own and names itself when it applies them: x cannot exceed 255 and z is 0 or 1 (that is the domain); a run is at most 300 seconds; and a load limit — it refuses to *start* a run that would put more than nine minutes of x-weighted time into the last fifteen, tells you how long to wait, and records nothing. A refusal is not an observation. Plan around it or wait.
+
+Runs longer than about 90 seconds need the shell tool's timeout raised (it accepts up to 600000 ms); the program prints nothing until the run ends. One run at a time — never two in parallel.
+
+## What a model is
+
+An explicit rule that maps the history of x and z, and y's own past, to y's future. Write it as an equation — a difference equation, a differential equation, a fitted function, whatever the data support — with named parameters, each with a value and an uncertainty, and a statement of the domain in which it has been tested. Prefer the simplest form that predicts runs it was not fitted to. Report residuals, not just fits. When two models fit the past equally, the one that predicts a run you have not yet done is the better one — so do that run. Numbers you have not measured are guesses; say which are which.
+
+You may compute. Write analysis scripts as `runs/play/analysis/<name>.py` and run them with `py -3 runs/play/analysis/<name>.py`. numpy and matplotlib are installed; a script may save a plot as `runs/play/analysis/<name>.png` and you may read it. Scripts read the CSVs under `runs/play/` and print; they write nothing outside `runs/play/analysis/`, and they never touch anything but files. A script that reaches for the system, the network, or any other part of this machine has broken the experiment.
+
+Once you have a model, make it predict whole runs, not just numbers. Write its y(t) for the run you are about to do as a CSV (`t,y`) in `runs/play/analysis/` and pass it with `--trace`. The program scores it by RMS against what happened, next to the RMS of the laziest prediction — "y stays where it started" — and reports the skill, 1 − RMS/RMS_lazy. A metric interval tests one number; a trace tests the model. From the moment you have an equation, most runs should carry one.
+
+## The loop — every run, no exceptions
+
+1. **Why.** One or two sentences: what this run is meant to teach, and which earlier runs led here (cite their ids). This is the chain of reasoning; a reader should be able to follow it run by run.
+2. **Predict — before the run.** A metric with an interval and a probability: `--metric steady --lo 300 --hi 400 --conf 0.8` means "80 % that steady lands in [300, 400]". Or a `--claim "..." --conf 0.6` for a yes/no. The program writes your prediction to disk before it touches the system; there is no way to predict afterwards, so do not word predictions that cannot miss. Where you have a model, the prediction should come from it, and say so.
+3. **Run.** `py -3 play.py run --why "..." --predict "..." --conf ... --metric ... --lo ... --hi ... --cmds "..." --for ...` (plus `--trace` once you have a model). Read the whole summary and the trace. The trace is thinned for long runs; the full record is the run's CSV.
+4. **Score.** Metric runs score themselves. Claims: `py -3 play.py judge <id> --outcome yes|no|void --update "..."` — judge against what you wrote, not against what you now wish you had written. Judgements are final. `void` only when the run did not test the claim.
+5. **Update.** `py -3 play.py update <id> --update "..."` for metric runs. Say what this run changed in the model: a parameter revised, a term added or dropped, a domain edge found, a surprise. Each update should read as one step on from the last.
+
+## When the system changes
+
+It will. Systems drift, wear, break and come back different, and a model with no clock in it is a model of a system that has already stopped existing. From where you sit there is no such thing as a faulty reading: whatever produces y is the system, and if y changes character, the system has changed. That is not a reason to stop. It is the most information-rich thing that can happen to you.
+
+The signs: predictions that used to hit start missing; a repeated run answers differently by more than the noise; the idle value moves and stays moved. When you see them, do not explain them away and do not keep scoring the old model against a new world. Declare it: `py -3 play.py regime --why "..."` with the runs that showed it. From then on the ledger scores the new regime on its own, and the old model stays in `model.md` as the record of what the system was — not wrong, just past. A regime is a claim about the system, not a reset button: the overall record keeps every run, the number of regimes you declared is printed beside it, and a regime declared with no change visible in the data is a mark against you, not a clean slate.
+
+Then rebuild, deliberately. Re-run the same basic probes you used at the start (a run with no commands, a steady x at a few values, both z) to find the new baseline; write model B beside model A and say which parameters moved and which held — that difference is the description of what changed. Ask the one question that decides what kind of change it was: is there an action that brings regime A back? If some command restores the old behaviour, you have found a second state of the same system and the model grows a state variable. If nothing does, the change is permanent and model B is now the model. Both answers are results. Slow change is the same thing in small steps: where the data say a parameter is drifting with time or with accumulated x, let it — a coefficient can be a function of t.
+
+## Your files
+
+You own these. Create them at run 1 and revise them as you go.
+
+- `runs/play/model.md` — the current model, as equations, with parameters, uncertainties, the runs they were fitted on, the runs they were tested on, and the residuals. What it predicts for a command you have not tried. Open questions, ranked by what answering them would be worth. One section per regime; the old ones stay.
+- `runs/play/boundaries.md` — the edges: where the model stops holding, where y's behaviour changes character, or where it stops making sense. Each with the run that found it and how sure you are. Nothing in this file should be a rule of the program.
+- `runs/play/session-N.md` — when you stop: the model as it stands, what surprised you, the scorecard from `py -3 play.py ledger` pasted in, and the three runs you would do next.
+
+These files are also your memory. If your context is ever compacted or you lose track of where you are, re-read `model.md`, `boundaries.md` and the output of `py -3 play.py ledger` before the next run. Keep them current enough that this works.
+
+Never edit `ledger.jsonl`, `ledger.md`, the CSVs, `session.json`, `config.json` or `play.py`. Never re-run to "fix" a miss; the miss is data.
+
+## Calibration
+
+The goal is not to be right. It is to know how right you are. State 0.8 only when eight of ten such predictions would hit. Run `py -3 play.py ledger` every ten runs; if it says overconfident, widen your intervals or lower your confidences, and say so in the next update. Intervals that always hit are as useless as ones that never do — the scorecard shows your mean interval width per metric next to your hit rate, and narrow-and-right is the goal. Predicting an easy metric with a wide interval, run after run, is not calibration; it is hiding.
+
+## Strategy hints, not rules
+
+Look before acting; a run with no commands has no surprises in it. Change one thing at a time. Repeat a run before trusting a difference — y has noise and you do not yet know how much. Edges are worth finding and finding them costs runs; a run that reaches an edge and comes back teaches more than one that never returns, and one that never returns is still a fact. A steady x, a brief one, a repeated one and a slowly rising one are different experiments; when and for how long you set x is a variable like how much. Try both values of z. Try tiny values and the largest. How long things take is as much a fact as where things end up. If the system ever answers a repeated run differently, that is the most important thing that has happened so far.
+
+## Stopping
+
+There is a ceiling on runs per session, and you are expected to stop before it, by choice: `py -3 play.py stop --why "..."` when you believe the next ten runs would change the model by less than the noise, or when a real edge has been reached and you can say what it is. A change in the system is not a reason to stop (see above). The only other reason is that the system has stopped being one: y no longer responds to any input at all over several varied runs, and there is nothing left to model. Say so in the session file. Albert reads it. Do not start a new `init` to get around the ceiling; the program will not let you anyway.
+
+## Start
+
+`py -3 play.py init` — or, if it tells you a session is already open, simply continue with the next run; your files and the ledger are where you left them. Then play.
